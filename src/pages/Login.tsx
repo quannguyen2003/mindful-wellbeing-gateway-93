@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Brain } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -14,6 +15,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,14 +23,13 @@ const Login = () => {
 
     try {
       // This is where you would integrate with MongoDB Atlas API
-      // For now, we'll simulate a successful login
       console.log('Login attempt:', { email, password });
       
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Store user session (you'll replace this with actual MongoDB Atlas integration)
-      localStorage.setItem('user', JSON.stringify({ email }));
+      // Use the AuthContext login function
+      login({ email });
       
       toast({
         title: "Login successful!",
