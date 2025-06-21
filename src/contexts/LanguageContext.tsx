@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 type Language = 'en' | 'vi';
@@ -17,6 +16,7 @@ const translations = {
     'nav.aiAssistant': 'AI Assistant',
     'nav.questionnaire': 'Form Questionnaire',
     'nav.expert': '1:1 with Expert',
+    'nav.expertProfile': 'Expert Profile',
     
     // Homepage
     'home.hero.title': 'Your Mental Health',
@@ -56,6 +56,7 @@ const translations = {
     'nav.aiAssistant': 'Trợ Lý AI',
     'nav.questionnaire': 'Bảng Câu Hỏi',
     'nav.expert': '1:1 với Chuyên Gia',
+    'nav.expertProfile': 'Hồ Sơ Chuyên Gia',
     
     // Homepage
     'home.hero.title': 'Hành Trình Sức Khỏe',
