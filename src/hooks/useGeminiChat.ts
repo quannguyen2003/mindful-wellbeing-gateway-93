@@ -18,11 +18,13 @@ interface ChatSession {
 
 const SYSTEM_PROMPT = `Bạn là một AI assistant thông minh và hữu ích. Hãy trả lời các câu hỏi một cách chính xác, chi tiết và thân thiện. Bạn có thể trả lời bằng tiếng Việt hoặc tiếng Anh tùy theo ngôn ngữ mà người dùng sử dụng. Hãy luôn giữ thái độ lịch sự và chuyên nghiệp.`;
 
+// Hardcoded API key
+const GEMINI_API_KEY = 'AIzaSyB6yBq68qb-HAJiM7AUq0Kj_LwCiRlif58';
+
 export const useGeminiChat = () => {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [currentSession, setCurrentSession] = useState<ChatSession | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState<string | null>(null);
 
   // Load sessions from localStorage
   const loadSessions = useCallback(() => {
@@ -38,11 +40,6 @@ export const useGeminiChat = () => {
         }))
       }));
       setSessions(parsed);
-    }
-
-    const savedApiKey = localStorage.getItem('gemini_api_key');
-    if (savedApiKey) {
-      setApiKey(savedApiKey);
     }
   }, []);
 
@@ -70,7 +67,7 @@ export const useGeminiChat = () => {
 
   // Send message to Gemini API
   const sendMessage = useCallback(async (content: string) => {
-    if (!apiKey || !currentSession) return;
+    if (!currentSession) return;
 
     setIsLoading(true);
 
@@ -101,7 +98,7 @@ export const useGeminiChat = () => {
         }))
       ];
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +162,7 @@ export const useGeminiChat = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [apiKey, currentSession, sessions, saveSessions]);
+  }, [currentSession, sessions, saveSessions]);
 
   // Select session
   const selectSession = useCallback((sessionId: string) => {
@@ -189,12 +186,10 @@ export const useGeminiChat = () => {
     sessions,
     currentSession,
     isLoading,
-    apiKey,
     loadSessions,
     createNewSession,
     sendMessage,
     selectSession,
-    deleteSession,
-    setApiKey
+    deleteSession
   };
 };

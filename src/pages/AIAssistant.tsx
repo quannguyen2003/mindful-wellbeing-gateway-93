@@ -4,7 +4,6 @@ import Navbar from '@/components/Navbar';
 import ChatMessage from '@/components/ChatMessage';
 import ChatInput from '@/components/ChatInput';
 import ChatSidebar from '@/components/ChatSidebar';
-import ApiKeyInput from '@/components/ApiKeyInput';
 import { useGeminiChat } from '@/hooks/useGeminiChat';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -13,13 +12,11 @@ const AIAssistant = () => {
     sessions,
     currentSession,
     isLoading,
-    apiKey,
     loadSessions,
     createNewSession,
     sendMessage,
     selectSession,
-    deleteSession,
-    setApiKey
+    deleteSession
   } = useGeminiChat();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -32,13 +29,6 @@ const AIAssistant = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [currentSession?.messages]);
 
-  const handleApiKeySaved = (key: string) => {
-    setApiKey(key);
-    if (sessions.length === 0) {
-      createNewSession();
-    }
-  };
-
   const handleSendMessage = (content: string) => {
     if (!currentSession) {
       const newSession = createNewSession();
@@ -49,15 +39,6 @@ const AIAssistant = () => {
       sendMessage(content);
     }
   };
-
-  if (!apiKey) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <Navbar />
-        <ApiKeyInput onApiKeySaved={handleApiKeySaved} />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-white">
