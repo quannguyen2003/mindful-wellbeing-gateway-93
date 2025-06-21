@@ -175,7 +175,7 @@ const Index = () => {
                   </div>
                   <p className="text-gray-600 mb-4 italic">"{testimonial.text}"</p>
                   <div className="flex items-center">
-                    <divClassName="w-10 h-10 bg-gradient-to-r from-blue-500 to-teal-500 rounded-full flex items-center justify-center mr-3">
+                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-teal-500 rounded-full flex items-center justify-center mr-3">
                       <span className="text-white font-semibold text-sm">
                         {testimonial.name.charAt(0)}
                       </span>
