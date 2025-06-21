@@ -1,13 +1,17 @@
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Brain, FileText, Users, UserCheck } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Brain, FileText, Users, UserCheck, LogOut, User } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { t } = useLanguage();
+  const { user, logout, isAuthenticated } = useAuth();
   
   const navItems = [
     { name: t('nav.aiAssistant'), path: '/ai-assistant', icon: Brain },
@@ -15,6 +19,11 @@ const Navbar = () => {
     { name: t('nav.expert'), path: '/expert', icon: Users },
     { name: t('nav.expertProfile'), path: '/expert-profile', icon: UserCheck },
   ];
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   return (
     <nav className="bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100 sticky top-0 z-50">
@@ -55,9 +64,35 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Language Switcher - Fixed position */}
-          <div className="hidden md:flex items-center flex-shrink-0">
+          {/* Auth and Language Switcher */}
+          <div className="hidden md:flex items-center space-x-3 flex-shrink-0">
             <LanguageSwitcher />
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-1 text-sm text-gray-600">
+                  <User className="w-4 h-4" />
+                  <span>{user?.name || user?.email}</span>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="flex items-center space-x-1"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Logout</span>
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2">
+                <Button variant="outline" size="sm" asChild>
+                  <Link to="/login">Login</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link to="/register">Sign Up</Link>
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
