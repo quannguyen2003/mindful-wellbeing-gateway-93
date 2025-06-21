@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Star, Calendar, MessageCircle, Award, BookOpen } from 'lucide-react';
 
 const ExpertProfile = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const experts = [
     {
