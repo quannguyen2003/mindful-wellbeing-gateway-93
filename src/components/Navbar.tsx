@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Brain, FileText, Users } from 'lucide-react';
+import { Brain, FileText, Users, UserCheck } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
@@ -13,6 +13,7 @@ const Navbar = () => {
     { name: t('nav.aiAssistant'), path: '/ai-assistant', icon: Brain },
     { name: t('nav.questionnaire'), path: '/questionnaire', icon: FileText },
     { name: t('nav.expert'), path: '/expert', icon: Users },
+    { name: t('nav.expertProfile'), path: '/expert-profile', icon: UserCheck },
   ];
 
   return (
