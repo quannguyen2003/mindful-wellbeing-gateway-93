@@ -2,41 +2,52 @@
 import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Languages } from 'lucide-react';
 
 const LanguageSwitcher = () => {
   const { language, setLanguage } = useLanguage();
 
   return (
-    <div className="flex items-center space-x-2">
-      <Languages className="w-4 h-4 text-gray-600" />
-      <div className="flex rounded-lg border border-gray-200 overflow-hidden">
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button
-          variant={language === 'en' ? 'default' : 'ghost'}
+          variant="outline"
           size="sm"
+          className="flex items-center space-x-2 px-3 py-2"
+        >
+          <Languages className="w-4 h-4 text-gray-600" />
+          <span className="text-xs font-medium">{language.toUpperCase()}</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-24">
+        <DropdownMenuItem
           onClick={() => setLanguage('en')}
-          className={`rounded-none px-3 py-1 text-xs ${
+          className={`cursor-pointer ${
             language === 'en' 
-              ? 'bg-blue-600 text-white hover:bg-blue-700' 
-              : 'text-gray-600 hover:bg-gray-50'
+              ? 'bg-blue-50 text-blue-600 font-medium' 
+              : 'text-gray-600'
           }`}
         >
           EN
-        </Button>
-        <Button
-          variant={language === 'vi' ? 'default' : 'ghost'}
-          size="sm"
+        </DropdownMenuItem>
+        <DropdownMenuItem
           onClick={() => setLanguage('vi')}
-          className={`rounded-none px-3 py-1 text-xs ${
+          className={`cursor-pointer ${
             language === 'vi' 
-              ? 'bg-blue-600 text-white hover:bg-blue-700' 
-              : 'text-gray-600 hover:bg-gray-50'
+              ? 'bg-blue-50 text-blue-600 font-medium' 
+              : 'text-gray-600'
           }`}
         >
           VI
-        </Button>
-      </div>
-    </div>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
