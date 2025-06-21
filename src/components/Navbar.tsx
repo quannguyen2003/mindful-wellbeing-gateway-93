@@ -2,14 +2,17 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Brain, FileText, Users } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const Navbar = () => {
   const location = useLocation();
+  const { t } = useLanguage();
   
   const navItems = [
-    { name: 'AI Assistant', path: '/ai-assistant', icon: Brain },
-    { name: 'Form Questionnaire', path: '/questionnaire', icon: FileText },
-    { name: '1:1 with Expert', path: '/expert', icon: Users },
+    { name: t('nav.aiAssistant'), path: '/ai-assistant', icon: Brain },
+    { name: t('nav.questionnaire'), path: '/questionnaire', icon: FileText },
+    { name: t('nav.expert'), path: '/expert', icon: Users },
   ];
 
   return (
@@ -47,6 +50,9 @@ const Navbar = () => {
                 </Link>
               );
             })}
+            
+            {/* Language Switcher */}
+            <LanguageSwitcher />
           </div>
 
           {/* Mobile Menu Button */}

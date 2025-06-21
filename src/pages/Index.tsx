@@ -4,29 +4,32 @@ import { Link } from 'react-router-dom';
 import { Brain, Heart, Shield, Users, ArrowRight, CheckCircle, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useLanguage } from '@/contexts/LanguageContext';
 import Navbar from '@/components/Navbar';
 
 const Index = () => {
+  const { t } = useLanguage();
+
   const features = [
     {
       icon: Brain,
-      title: "AI-Powered Support",
-      description: "Get instant, personalized mental health guidance from our advanced AI assistant available 24/7."
+      title: t('home.features.aiSupport.title'),
+      description: t('home.features.aiSupport.description')
     },
     {
       icon: Heart,
-      title: "Comprehensive Assessment",
-      description: "Take our scientifically-backed questionnaire to understand your mental health status and get tailored recommendations."
+      title: t('home.features.assessment.title'),
+      description: t('home.features.assessment.description')
     },
     {
       icon: Users,
-      title: "Expert Consultation",
-      description: "Connect with licensed mental health professionals for personalized one-on-one therapy sessions."
+      title: t('home.features.expert.title'),
+      description: t('home.features.expert.description')
     },
     {
       icon: Shield,
-      title: "Safe & Confidential",
-      description: "Your privacy is our priority. All conversations and data are encrypted and completely confidential."
+      title: t('home.features.safe.title'),
+      description: t('home.features.safe.description')
     }
   ];
 
@@ -57,25 +60,24 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Your Mental Health
+              {t('home.hero.title')}
               <span className="block bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">
-                Journey Starts Here
+                {t('home.hero.subtitle')}
               </span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Take control of your mental wellbeing with our comprehensive platform. Get AI-powered support, 
-              professional assessments, and connect with licensed experts - all in one safe space.
+              {t('home.hero.description')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/questionnaire">
                 <Button className="bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-lg px-8 py-3 h-auto">
-                  Start Assessment
+                  {t('home.hero.startAssessment')}
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
               <Link to="/ai-assistant">
                 <Button variant="outline" className="text-lg px-8 py-3 h-auto border-blue-200 text-blue-600 hover:bg-blue-50">
-                  Try AI Assistant
+                  {t('home.hero.tryAI')}
                 </Button>
               </Link>
             </div>
@@ -94,10 +96,10 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Everything You Need for Mental Wellness
+              {t('home.features.title')}
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Our platform combines cutting-edge technology with human expertise to provide comprehensive mental health support.
+              {t('home.features.subtitle')}
             </p>
           </div>
           
@@ -125,21 +127,20 @@ const Index = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Card className="border-0 shadow-2xl bg-gradient-to-r from-blue-600 to-teal-600 text-white overflow-hidden">
             <CardContent className="p-12 relative">
-              <h2 className="text-4xl font-bold mb-4">Ready to Begin Your Journey?</h2>
+              <h2 className="text-4xl font-bold mb-4">{t('home.cta.title')}</h2>
               <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                Join thousands who have taken the first step towards better mental health. 
-                Start with our quick assessment or chat with our AI assistant.
+                {t('home.cta.description')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/questionnaire">
                   <Button className="bg-white text-blue-600 hover:bg-gray-50 text-lg px-8 py-3 h-auto font-semibold">
-                    Take Assessment
+                    {t('home.cta.takeAssessment')}
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
                 </Link>
                 <Link to="/expert">
                   <Button variant="outline" className="border-white text-white hover:bg-white/10 text-lg px-8 py-3 h-auto">
-                    Book Expert Session
+                    {t('home.cta.bookExpert')}
                   </Button>
                 </Link>
               </div>
@@ -157,10 +158,10 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              What Our Users Say
+              {t('home.testimonials.title')}
             </h2>
             <p className="text-xl text-gray-600">
-              Real stories from people who found support through our platform
+              {t('home.testimonials.subtitle')}
             </p>
           </div>
           
@@ -199,8 +200,8 @@ const Index = () => {
             <span className="text-2xl font-bold">MindWell</span>
           </div>
           <div className="text-center text-gray-400">
-            <p className="mb-4">Your mental health matters. We're here to support you every step of the way.</p>
-            <p className="text-sm">© 2024 MindWell. All rights reserved. This platform is for informational purposes and does not replace professional medical advice.</p>
+            <p className="mb-4">{t('footer.tagline')}</p>
+            <p className="text-sm">{t('footer.disclaimer')}</p>
           </div>
         </div>
       </footer>
