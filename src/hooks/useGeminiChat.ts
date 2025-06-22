@@ -65,6 +65,26 @@ export const useGeminiChat = () => {
     return newSession;
   }, [sessions, saveSessions]);
 
+  // Send conversation to MongoDB API
+  const saveConversationToAPI = useCallback(async (sessionId: string, userMessage: string, botResponse: string) => {
+    try {
+      await fetch('http://13.229.93.67:3000/api/chat/append', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sessionId,
+          userMessage,
+          botResponse
+        }),
+      });
+      console.log('Conversation saved to API successfully');
+    } catch (error) {
+      console.error('Failed to save conversation to API:', error);
+    }
+  }, []);
+
   // Send message to Gemini API
   const sendMessage = useCallback(async (content: string) => {
     if (!currentSession) return;
@@ -121,9 +141,11 @@ export const useGeminiChat = () => {
       const data = await response.json();
       
       if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+        const botResponseText = data.candidates[0].content.parts[0].text;
+        
         const assistantMessage: ChatMessage = {
           id: (Date.now() + 1).toString(),
-          content: data.candidates[0].content.parts[0].text,
+          content: botResponseText,
           role: 'assistant',
           timestamp: new Date()
         };
@@ -141,6 +163,9 @@ export const useGeminiChat = () => {
           session.id === finalSession.id ? finalSession : session
         );
         saveSessions(updatedSessions);
+
+        // Save conversation to API
+        await saveConversationToAPI(currentSession.id, content, botResponseText);
       }
     } catch (error) {
       console.error('Error calling Gemini API:', error);
@@ -162,7 +187,7 @@ export const useGeminiChat = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [currentSession, sessions, saveSessions]);
+  }, [currentSession, sessions, saveSessions, saveConversationToAPI]);
 
   // Select session
   const selectSession = useCallback((sessionId: string) => {
