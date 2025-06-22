@@ -16,6 +16,16 @@ interface ChatSession {
   updatedAt: Date;
 }
 
+interface ConversationPair {
+  userMessage: string;
+  botResponse: string;
+}
+
+interface ChatHistoryPayload {
+  sessionId: string;
+  conversations: ConversationPair[];
+}
+
 const SYSTEM_PROMPT = `Bạn là một AI assistant thông minh và hữu ích. Hãy trả lời các câu hỏi một cách chính xác, chi tiết và thân thiện. Bạn có thể trả lời bằng tiếng Việt hoặc tiếng Anh tùy theo ngôn ngữ mà người dùng sử dụng. Hãy luôn giữ thái độ lịch sự và chuyên nghiệp.`;
 
 // Hardcoded API key
@@ -47,6 +57,47 @@ export const useGeminiChat = () => {
   const saveSessions = useCallback((updatedSessions: ChatSession[]) => {
     localStorage.setItem('chat_sessions', JSON.stringify(updatedSessions));
     setSessions(updatedSessions);
+  }, []);
+
+  // Send chat history to API
+  const sendChatHistoryToAPI = useCallback(async (session: ChatSession) => {
+    try {
+      const conversations: ConversationPair[] = [];
+      
+      // Group messages into conversation pairs
+      for (let i = 0; i < session.messages.length - 1; i += 2) {
+        const userMessage = session.messages[i];
+        const botMessage = session.messages[i + 1];
+        
+        if (userMessage?.role === 'user' && botMessage?.role === 'assistant') {
+          conversations.push({
+            userMessage: userMessage.content,
+            botResponse: botMessage.content
+          });
+        }
+      }
+
+      const payload: ChatHistoryPayload = {
+        sessionId: session.id,
+        conversations
+      };
+
+      const response = await fetch('http://13.229.93.67:3000/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        console.error('Failed to send chat history to API:', response.status);
+      } else {
+        console.log('Chat history sent successfully');
+      }
+    } catch (error) {
+      console.error('Error sending chat history to API:', error);
+    }
   }, []);
 
   // Create new chat session
@@ -141,6 +192,9 @@ export const useGeminiChat = () => {
           session.id === finalSession.id ? finalSession : session
         );
         saveSessions(updatedSessions);
+
+        // Send chat history to API after completing the conversation pair
+        await sendChatHistoryToAPI(finalSession);
       }
     } catch (error) {
       console.error('Error calling Gemini API:', error);
@@ -162,7 +216,7 @@ export const useGeminiChat = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [currentSession, sessions, saveSessions]);
+  }, [currentSession, sessions, saveSessions, sendChatHistoryToAPI]);
 
   // Select session
   const selectSession = useCallback((sessionId: string) => {
